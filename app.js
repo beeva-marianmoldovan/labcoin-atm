@@ -19,12 +19,16 @@ function recharge(address){
 
     rq(process.env.CONTRACT_URL, function (error, response, body) {
       var json = JSON.parse(body)
-      var contract = new web3.eth.contract(json.abi).at(json.networks['1337'].address)
+      var contract = web3.eth.contract(json.abi).at(json.networks['1337'].address)
+      web3.eth.defaultAccount = process.env.ADDRESS
       web3.personal.unlockAccount(process.env.ADDRESS, process.env.PASSWORD);
-      web3.eth.sendTransaction({from:process.env.ADDRESS, to:address, value: web3.toWei('0.01', 'ether')}, function(err, result){
-        if(err) reject(new api.ApiResponse(err, {}, 400))
-        else resolve('Ok')
-      })
+      if(!contract.isRegistered(address)){
+        web3.eth.sendTransaction({from:process.env.ADDRESS, to:address, value: web3.toWei('0.01', 'ether')}, function(err, result){
+          if(err) reject(new api.ApiResponse(err, {}, 400))
+          else resolve('Ok')
+        })
+      }
+      else reject(new api.ApiResponse('User is already registered', {}, 400))
     })
   })
 }
