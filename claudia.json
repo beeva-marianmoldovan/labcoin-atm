@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "labcoin-atm-executor",
+    "name": "labcoin-atm",
+    "region": "eu-west-1"
+  },
+  "api": {
+    "id": "qczr5ylzki",
+    "module": "app"
+  }
+}
